@@ -3,7 +3,7 @@ import { SingleWord } from "./SingleWord.jsx";
 
 export const RandomWords = (props) => {
   var words = props.wordList.map((w, i) => {
-    return <SingleWord word={w.value} current={w.isCurrent} key={i} />;
+    return <SingleWord word={w.value} isCurrent={w.isCurrent} currentInput={props.currentInput} key={i} />;
   })
   return (
     <div className="words">
@@ -12,5 +12,6 @@ export const RandomWords = (props) => {
   );
 };
 RandomWords.propTypes = {
-  wordList: React.PropTypes.array.isRequired
+  wordList: React.PropTypes.array.isRequired,
+  currentInput: React.PropTypes.string.isRequired
 }
