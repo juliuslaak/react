@@ -21,11 +21,21 @@ export const App = React.createClass({
   handleCharacterMatch: function(e) {
     const currentElem = this.state.wordList.find(this.checkIfIsCurrentWord);
     
-    // for (let i = 0; i < currentElem.value.length; i++) {
-    //   if (currentElem.value[i] == e.target.value[i]) {
-    //     debugger
-    //   }
-    // }
+    if (e.target.value[e.target.value.length - 1] == " ") {
+      this.setState({inputContent: ''});
+
+      const newWordList = this.state.wordList;
+      let pastWord = NaN;
+
+      for (let i = 0; i < newWordList.length; i++) {
+        if (pastWord != NaN && pastWord == i - 1) {
+          newWordList[i].isCurrent = true;
+        } else if (newWordList[i].isCurrent) {
+          pastWord = i;
+          newWordList[i].isCurrent = false;
+        }
+      }
+    }
   },
 
   checkIfIsCurrentWord: function(e) {
