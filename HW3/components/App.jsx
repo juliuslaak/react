@@ -36,8 +36,17 @@ export const App = React.createClass({
 
       const newWordList = this.state.wordList;
       let pastWord = NaN;
+      let typedEntities = 0;
+      let countEntities = true;
 
       for (let i = 0; i < newWordList.length; i++) {
+        if (countEntities) {
+          typedEntities += newWordList[i].value.length;
+        }
+        if ( newWordList[i].isCurrent ) {
+          countEntities = false;
+        }
+        
         if (pastWord != NaN && pastWord == i - 1) {
           newWordList[i].isCurrent = true;
         } else if ( newWordList[i].isCurrent ) {
@@ -47,10 +56,13 @@ export const App = React.createClass({
 
           if ( newWordList[i].value == e.target.value.trim() ) {
             newWordList[i].wasCorrect = true;
-            this.setState({ matchedWords: this.state.matchedWords + 1 })
-            this.setState({ accuracy: (Math.round((this.state.matchedWords + 1 / this.state.wordList.length * 100) * 100, 2) / 100) })
+            this.setState({ matchedWords: this.state.matchedWords + 1 });
+            this.setState({ accuracy: (Math.round((this.state.matchedWords + 1 / this.state.wordList.length * 100) * 100, 2) / 100) });
           }
         }
+
+        let currentTime = new Date();
+        this.setState({ wordsPerMinute: (Math.round((( typedEntities / 5 ) / ((currentTime.getTime() - this.props.startTime.getTime()) * 0.001 / 60) ) * 100, 2) / 100) })
       }
     }
   },
@@ -83,7 +95,7 @@ export const App = React.createClass({
           handleInputChange={this.handleInputChange}
         />
         <Statistics 
-          wordsPerMinute={this.state.matchedWords}
+          wordsPerMinute={this.state.wordsPerMinute}
           accuracy={this.state.accuracy}
         />
       </div>
