@@ -6,13 +6,17 @@ export const SingleWord = React.createClass({
   propTypes: {
     word: React.PropTypes.string.isRequired,
     isCurrent: React.PropTypes.bool.isRequired,
+    wasLast: React.PropTypes.bool.isRequired,
+    wasCorrect: React.PropTypes.bool.isRequired,
     currentInput: React.PropTypes.string.isRequired
   },
 
   loadClasses: function() {
     const classes = classNames({
       'current-word': ( this.props.isCurrent ),
-      'random-word': true
+      'random-word': true,
+      'match': (this.props.wasLast && this.props.wasCorrect),
+      'mismatch': (this.props.wasLast  && !this.props.wasCorrect)
     })
     return classes;
   },
@@ -20,7 +24,6 @@ export const SingleWord = React.createClass({
   colorWord: function(word) {
     if (this.props.isCurrent) {
       let letters = [];
-      let letterClass = "";
 
       for(let i = 0; i < word.length; i++) {
         let currentLetter = word[i];
