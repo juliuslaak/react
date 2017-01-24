@@ -6,10 +6,19 @@ import { Statistics } from './Statistics.jsx';
 
 export const App = React.createClass({
 
+  getDefaultProps: function() {
+    return {
+      startTime: new Date()
+    }
+  },
+
   getInitialState: function() {
     return {
       inputContent: '',
-      wordList: []
+      wordList: [],
+      wordsPerMinute: 0,
+      accuracy: 0,
+      matchedWords: 0
     };
   },
 
@@ -23,6 +32,7 @@ export const App = React.createClass({
     
     if (e.target.value[e.target.value.length - 1] == " ") {
       this.setState({ inputContent: '' });
+      this.setState({ wordsPerMinute: this.state.wordsPerMinute + 1 })
 
       const newWordList = this.state.wordList;
       let pastWord = NaN;
@@ -37,6 +47,8 @@ export const App = React.createClass({
 
           if ( newWordList[i].value == e.target.value.trim() ) {
             newWordList[i].wasCorrect = true;
+            this.setState({ matchedWords: this.state.matchedWords + 1 })
+            this.setState({ accuracy: (Math.round((this.state.matchedWords + 1 / this.state.wordList.length * 100) * 100, 2) / 100) })
           }
         }
       }
@@ -70,7 +82,10 @@ export const App = React.createClass({
           inputValue={this.state.inputContent}
           handleInputChange={this.handleInputChange}
         />
-        <Statistics />
+        <Statistics 
+          wordsPerMinute={this.state.matchedWords}
+          accuracy={this.state.accuracy}
+        />
       </div>
     );
   }
