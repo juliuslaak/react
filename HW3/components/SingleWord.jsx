@@ -18,20 +18,25 @@ export const SingleWord = React.createClass({
   },
 
   colorWord: function(word) {
-    let letters = [];
-    let letterClass = "";
+    if (this.props.isCurrent) {
+      let letters = [];
+      let letterClass = "";
 
-    for(let i = 0; i < word.length; i++) {
-      let currentLetter = word[i];
-      let matchClass = "";
+      for(let i = 0; i < word.length; i++) {
+        let currentLetter = word[i];
+        let matchClass = "";
 
-      if (i < this.props.currentInput.length) {
-        matchClass = (this.props.currentInput[i] == currentLetter ? "match" : "mismatch")
-      }
+        if (i < this.props.currentInput.length) {
+          matchClass = (this.props.currentInput[i] == currentLetter ? "match" : "mismatch")
+        }
 
-      letters.push(<Letter letter={currentLetter} matchClass={matchClass} key={i} />);
+        letters.push(<Letter letter={currentLetter} matchClass={matchClass} key={i} />);
+      };
+      
+      return letters;
     };
-    return letters;
+
+    return word;
   },
 
   render: function() {
